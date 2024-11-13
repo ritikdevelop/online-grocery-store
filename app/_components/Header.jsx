@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, Search, ShoppingBag } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,17 +14,19 @@ import {
 import GlobalAPi from "../_utils/GlobalAPi";
 
 function Header() {
+  const [categoryList, setCategoryList] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     getCategoryList();
-  },[])
+  }, []);
 
   //! Category list function
-  const getCategoryList=()=>{
-    GlobalAPi.getCategory().then((resp)=>{
-      console.log("category list Response: ",resp.data.data);
-  })
-}
+  const getCategoryList = () => {
+    GlobalAPi.getCategory().then((resp) => {
+      // console.log("category list Response: ", resp.data.data);
+      setCategoryList(resp.data.data);
+    });
+  };
 
   return (
     <div className="p-5 shadow-sm flex justify-between">
@@ -41,10 +43,24 @@ function Header() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            {categoryList.map((category, index) => (
+              <DropdownMenuItem
+                key={index}
+                className="flex gap-2 items-center cursor-pointer"
+              >
+                {console.log(category?.icon?.url)}
+                {/* <Image
+                  src={
+                    process.env.NEXT_PUBLIC_BACKEND_BASE_URL+
+                    category?.icon?.url}
+                  unoptimized={true}
+                  alt="icon"
+                  width={23}
+                  height={23}
+                /> */}
+                <h2>{category?.name}</h2>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
