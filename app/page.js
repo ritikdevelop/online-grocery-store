@@ -1,11 +1,16 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Slider from "./_components/Slider";
+import GlobalAPi from "./_utils/GlobalAPi";
 
-export default function Home() {
+export default async function Home() {
+
+  const sliderList = await GlobalAPi.getSliders();
+
   return (
     <div>
-      <h1>Home</h1>
+      {/* Sliders */}
+      <Slider sliderList={sliderList} />
     </div>
   );
 }
